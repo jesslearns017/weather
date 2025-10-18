@@ -19,7 +19,7 @@ export default function CurrentWeather({ weatherData, unit, onToggleUnit, windSp
       <div className="flex items-center gap-2 mb-6">
         <MapPin className="w-5 h-5 text-blue-200" />
         <h2 className="text-2xl font-semibold text-white">
-          {weatherData.location.city}, {weatherData.location.country}
+          {weatherData.location.city}, {weatherData.location.admin1 || weatherData.location.country}
         </h2>
       </div>
 
