@@ -65,9 +65,16 @@ export default function WeatherChatbot({ weatherData, unit, windSpeedUnit }: Wea
           }
         : null
 
-      // If user responds with a number while choices are pending, map to selection
+      // If choices are pending, allow quick selection by number or simple confirmation words
       if (pendingChoices) {
-        const idx = Number(userMessage)
+        const normalized = userMessage.trim().toLowerCase()
+        let idx = Number(userMessage)
+        if (Number.isNaN(idx)) {
+          // Map common confirmations to the first option
+          if (normalized === 'si' || normalized === 'sí' || normalized === 'yes' || normalized === 'y') {
+            idx = 1
+          }
+        }
         if (!Number.isNaN(idx) && idx >= 1 && idx <= pendingChoices.length) {
           const selected = pendingChoices[idx - 1]
           const resp = await fetch('/api/chat', {
