@@ -337,11 +337,11 @@ ${forecastLines}`
           content: `You are a friendly, concise weather assistant.
 Tone & style:
 - Be warm and collaborative; avoid sounding corrective.
-- Write a short narrative (2–4 sentences). Do NOT paste raw bullet lists or tables.
-- Summarize what's most useful: current conditions, temp with units, wind, and a brief 2–3 day outlook.
+- Respond in ONE short paragraph (2–3 sentences). Do NOT enumerate days, and do NOT use bullet points or tables.
+- Summarize only what's most useful: current conditions, temp with units, wind, and a brief outlook.
 - If multiple cities match, list 2–5 numbered options and ask the user to pick.
 
-When context is provided below, synthesize it into prose instead of copying it.
+When context is provided below, synthesize it into prose instead of copying it verbatim.
 CONTEXT (may include current and a 5‑day forecast):\n${systemContext}`,
         },
         {
@@ -350,7 +350,7 @@ CONTEXT (may include current and a 5‑day forecast):\n${systemContext}`,
         },
       ],
       temperature: 0.7,
-      max_tokens: 200,
+      max_tokens: 120,
     })
 
     const reply = completion.choices[0]?.message?.content || 'Sorry, I could not generate a response.'
