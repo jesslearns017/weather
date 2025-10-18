@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { Search, MapPin, Wind, Droplets, Loader2 } from 'lucide-react'
 import { WeatherData, GeocodingResult } from '@/types/weather'
 import { getWeatherData, searchLocation } from '@/utils/api'
+import LanguageToggle from './LanguageToggle'
+import { useLanguage } from '@/context/LanguageContext'
 import { getWeatherDescription, getWeatherIcon } from '@/utils/weatherCodes'
 import CurrentWeather from './CurrentWeather'
 import ForecastCard from './ForecastCard'
@@ -11,6 +13,7 @@ import SearchBar from './SearchBar'
 import WeatherChatbot from './WeatherChatbot'
 
 export default function WeatherDashboard() {
+  const { lang } = useLanguage()
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -46,7 +49,7 @@ export default function WeatherDashboard() {
       return
     }
 
-    const results = await searchLocation(query)
+    const results = await searchLocation(query, lang)
     setSearchResults(results)
     setShowResults(true)
   }
@@ -74,6 +77,9 @@ export default function WeatherDashboard() {
         <p className="text-blue-100 text-lg">
           Current conditions and 5-day forecast
         </p>
+        <div className="mt-4 flex justify-end">
+          <LanguageToggle />
+        </div>
       </div>
 
       {/* Search Bar */}

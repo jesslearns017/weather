@@ -49,11 +49,11 @@ function prioritizeByQuery(results: GeocodingResult[], query: string): Geocoding
   return [...results].sort((a, b) => score(b) - score(a))
 }
 
-export async function searchLocation(query: string): Promise<GeocodingResult[]> {
+export async function searchLocation(query: string, lang: string = 'en'): Promise<GeocodingResult[]> {
   try {
     const qRaw = query
     const response = await fetch(
-      `${GEOCODING_API}?name=${encodeURIComponent(query)}&count=10&language=en&format=json`
+      `${GEOCODING_API}?name=${encodeURIComponent(query)}&count=10&language=${encodeURIComponent(lang)}&format=json`
     )
     
     if (!response.ok) {
@@ -72,7 +72,7 @@ export async function searchLocation(query: string): Promise<GeocodingResult[]> 
     if (!hasCountryHint && !hasPuertoRico) {
       try {
         const prRes = await fetch(
-          `${GEOCODING_API}?name=${encodeURIComponent(query + ' puerto rico')}&count=5&language=en&format=json`
+          `${GEOCODING_API}?name=${encodeURIComponent(query + ' puerto rico')}&count=5&language=${encodeURIComponent(lang)}&format=json`
         )
         if (prRes.ok) {
           const prData = await prRes.json()
