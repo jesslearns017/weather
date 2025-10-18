@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  images: {
-    unoptimized: true,
-  },
+  // Using default SSR output so API routes (e.g., app/api/chat) run on the server
 }
 
 module.exports = nextConfig
