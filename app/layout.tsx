@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import RegisterSW from '@/components/RegisterSW'
+import { LanguageProvider } from '@/context/LanguageContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,8 +24,10 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
       </head>
       <body className={inter.className}>
-        <RegisterSW />
-        {children}
+        <LanguageProvider>
+          <RegisterSW />
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   )
