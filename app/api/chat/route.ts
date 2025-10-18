@@ -1,4 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
+
+// Ensure this route runs on the Node.js runtime (not Edge) so OpenAI SDK works reliably in serverless
+export const runtime = 'nodejs'
+// Avoid caching responses for correctness
+export const dynamic = 'force-dynamic'
 import OpenAI from 'openai'
 
 const GEOCODING_API = 'https://geocoding-api.open-meteo.com/v1/search'
