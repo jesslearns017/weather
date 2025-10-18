@@ -16,7 +16,11 @@
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  /* Dark neutral base with subtle indigo/sky glows */
+  background:
+    radial-gradient(1200px 600px at 20% -10%, rgba(99,102,241,0.18), transparent),
+    radial-gradient(900px 480px at 110% 10%, rgba(56,189,248,0.14), transparent),
+    linear-gradient(180deg, #0b1220 0%, #0a0f1a 100%);
   font-family: Arial, Helvetica, sans-serif;
 }
 

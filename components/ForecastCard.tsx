@@ -23,7 +23,7 @@ export default function ForecastCard({
   unit,
 }: ForecastCardProps) {
   return (
-    <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:bg-white/10 transition-all duration-200 hover:scale-105">
+    <div className="bg-white/8 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:bg-white/15 transition-all duration-200 hover:scale-105">
       {/* Day and Date */}
       <div className="text-center mb-3">
         <div className="text-white font-semibold text-lg">{day}</div>
@@ -36,7 +36,7 @@ export default function ForecastCard({
       </div>
 
       {/* Description */}
-      <div className="text-blue-100 text-sm text-center mb-4 h-10 flex items-center justify-center">
+      <div className="text-slate-300 text-sm text-center mb-4 h-10 flex items-center justify-center">
         {description}
       </div>
 

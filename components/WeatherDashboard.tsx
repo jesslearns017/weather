@@ -168,7 +168,7 @@ export default function WeatherDashboard() {
           />
 
           {/* 5-Day Forecast */}
-          <div className="bg-blue-800/40 backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-blue-300/10" style={{ boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4)' }}>
+          <div className="bg-blue-500/15 backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-blue-300/20" style={{ boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4)' }}>
             <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
               <span>📅</span> {t(lang, 'forecast')}
             </h2>

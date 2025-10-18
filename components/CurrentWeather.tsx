@@ -19,10 +19,10 @@ export default function CurrentWeather({ weatherData, unit, onToggleUnit, windSp
   const { lang } = useLanguage()
   const { isFavorite, addFavorite, removeFavorite } = useFavorites()
   return (
-    <div className="bg-blue-800/40 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-blue-300/10">
+    <div className="bg-blue-500/20 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-blue-300/30">
       {/* Location */}
       <div className="flex items-center gap-2 mb-6">
-        <MapPin className="w-5 h-5 text-blue-200" />
+        <MapPin className="w-5 h-5 text-slate-300" />
         <h2 className="text-2xl font-semibold text-white">
           {weatherData.location.city}, {weatherData.location.admin1 || weatherData.location.country}
         </h2>
@@ -84,10 +84,10 @@ export default function CurrentWeather({ weatherData, unit, onToggleUnit, windSp
 
         {/* Weather Details */}
         <div className="grid grid-cols-2 gap-6 md:gap-8">
-          <div className="bg-white/5 rounded-xl p-4 backdrop-blur-sm border border-white/10">
+          <div className="bg-blue-500/15 rounded-xl p-4 backdrop-blur-sm border border-blue-300/20">
             <div className="flex items-center gap-2 mb-2">
               <Wind className="w-5 h-5 text-blue-200" />
-              <span className="text-blue-200 text-sm">{t(lang, 'wind_speed')}</span>
+              <span className="text-slate-300 text-sm">{t(lang, 'wind_speed')}</span>
             </div>
             <div className="text-2xl font-bold text-white mb-2">
               {convertWindSpeed(weatherData.current.windSpeed, windSpeedUnit)} <span className="text-lg">{getWindSpeedUnit(windSpeedUnit)}</span>
@@ -103,10 +103,10 @@ export default function CurrentWeather({ weatherData, unit, onToggleUnit, windSp
             </button>
           </div>
 
-          <div className="bg-white/5 rounded-xl p-4 backdrop-blur-sm border border-white/10">
+          <div className="bg-blue-500/15 rounded-xl p-4 backdrop-blur-sm border border-blue-300/20">
             <div className="flex items-center gap-2 mb-2">
-              <Droplets className="w-5 h-5 text-blue-200" />
-              <span className="text-blue-200 text-sm">{t(lang, 'humidity')}</span>
+              <Droplets className="w-5 h-5 text-slate-300" />
+              <span className="text-slate-300 text-sm">{t(lang, 'humidity')}</span>
             </div>
             <div className="text-2xl font-bold text-white">
               {weatherData.current.humidity}<span className="text-lg">%</span>
