@@ -58,7 +58,24 @@ export default function SearchBar({
                   {result.name}
                 </div>
                 <div className="text-sm text-gray-500 truncate">
-                  {result.admin1 && `${result.admin1}, `}{result.country}
+                  {(() => {
+                    const admin1 = result.admin1 || ''
+                    const country = result.country || ''
+                    const usTerritories = [
+                      'puerto rico',
+                      'guam',
+                      'u.s. virgin islands',
+                      'united states virgin islands',
+                      'american samoa',
+                      'northern mariana islands',
+                      'commonwealth of the northern mariana islands',
+                    ]
+                    const isTerritory = country === 'United States' && usTerritories.includes(admin1.toLowerCase())
+                    if (admin1) {
+                      return isTerritory ? admin1 : `${admin1}, ${country}`
+                    }
+                    return country
+                  })()}
                 </div>
               </div>
             </button>
