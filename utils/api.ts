@@ -18,10 +18,34 @@ function dedupeGeocoding(results: GeocodingResult[]): GeocodingResult[] {
   return out
 }
 
+function prioritizeByQuery(results: GeocodingResult[], query: string): GeocodingResult[] {
+  const norm = (s: string) => (s || '').toLowerCase().trim()
+  const q = norm(query)
+  // Try to infer a trailing region/country token from the query, e.g. "barranquitas puerto rico"
+  const parts = q.split(/\s+/)
+  const tail2 = parts.length >= 2 ? norm(parts.slice(-2).join(' ')) : ''
+  const tail1 = parts.length >= 1 ? norm(parts[parts.length - 1]) : ''
+
+  const score = (r: GeocodingResult) => {
+    const name = norm(r.name)
+    const admin1 = norm(r.admin1 || '')
+    const country = norm(r.country || '')
+    let s = 0
+    if (q && name.includes(q)) s += 5
+    if (tail2 && (admin1.includes(tail2) || country.includes(tail2))) s += 4
+    if (tail1 && (admin1.includes(tail1) || country.includes(tail1))) s += 2
+    // Favor Puerto Rico territory rendering when applicable
+    if (admin1.includes('puerto rico')) s += 1
+    return s
+  }
+
+  return [...results].sort((a, b) => score(b) - score(a))
+}
+
 export async function searchLocation(query: string): Promise<GeocodingResult[]> {
   try {
     const response = await fetch(
-      `${GEOCODING_API}?name=${encodeURIComponent(query)}&count=5&language=en&format=json`
+      `${GEOCODING_API}?name=${encodeURIComponent(query)}&count=10&language=en&format=json`
     )
     
     if (!response.ok) {
@@ -31,7 +55,8 @@ export async function searchLocation(query: string): Promise<GeocodingResult[]> 
     const data = await response.json()
     const results: GeocodingResult[] = data.results || []
     const unique = dedupeGeocoding(results)
-    return unique.slice(0, 5)
+    const prioritized = prioritizeByQuery(unique, query)
+    return prioritized.slice(0, 5)
   } catch (error) {
     console.error('Error searching location:', error)
     return []
