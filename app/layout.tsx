@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import RegisterSW from '@/components/RegisterSW'
 import { LanguageProvider } from '@/context/LanguageContext'
+import { FavoritesProvider } from '@/context/FavoritesContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -25,8 +26,10 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <LanguageProvider>
-          <RegisterSW />
-          {children}
+          <FavoritesProvider>
+            <RegisterSW />
+            {children}
+          </FavoritesProvider>
         </LanguageProvider>
       </body>
     </html>

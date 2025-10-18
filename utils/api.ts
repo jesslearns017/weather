@@ -128,6 +128,8 @@ export async function getWeatherData(
         city,
         country,
         admin1,
+        latitude,
+        longitude,
       },
     }
   } catch (error) {

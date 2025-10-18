@@ -12,6 +12,7 @@ import CurrentWeather from './CurrentWeather'
 import ForecastCard from './ForecastCard'
 import SearchBar from './SearchBar'
 import WeatherChatbot from './WeatherChatbot'
+import FavoritesBar from './FavoritesBar'
 
 export default function WeatherDashboard() {
   const { lang } = useLanguage()
@@ -82,6 +83,13 @@ export default function WeatherDashboard() {
         <div className="mt-4 flex justify-end">
           <LanguageToggle />
         </div>
+
+      {/* Favorites */}
+      <FavoritesBar
+        onSelect={(lat, lon, name, country, admin1) =>
+          loadWeather(lat, lon, name, country || '', admin1)
+        }
+      />
       </div>
 
       {/* Search Bar */}

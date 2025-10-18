@@ -4,6 +4,7 @@ import { getWeatherDescription, getWeatherIcon } from '@/utils/weatherCodes'
 import { convertTemperature } from '@/utils/temperature'
 import { convertWindSpeed, getWindSpeedUnit } from '@/utils/windSpeed'
 import { useLanguage } from '@/context/LanguageContext'
+import { useFavorites } from '@/context/FavoritesContext'
 import { t } from '@/utils/strings'
 
 interface CurrentWeatherProps {
@@ -16,6 +17,7 @@ interface CurrentWeatherProps {
 
 export default function CurrentWeather({ weatherData, unit, onToggleUnit, windSpeedUnit, onToggleWindSpeedUnit }: CurrentWeatherProps) {
   const { lang } = useLanguage()
+  const { isFavorite, addFavorite, removeFavorite } = useFavorites()
   return (
     <div className="bg-blue-800/40 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-blue-300/10">
       {/* Location */}
@@ -24,6 +26,33 @@ export default function CurrentWeather({ weatherData, unit, onToggleUnit, windSp
         <h2 className="text-2xl font-semibold text-white">
           {weatherData.location.city}, {weatherData.location.admin1 || weatherData.location.country}
         </h2>
+        <button
+          onClick={() => {
+            const lat = weatherData.location.latitude
+            const lon = weatherData.location.longitude
+            if (isFavorite(lat, lon)) {
+              removeFavorite(lat, lon)
+            } else {
+              addFavorite({
+                name: weatherData.location.city,
+                admin1: weatherData.location.admin1 || undefined,
+                country: weatherData.location.country || undefined,
+                latitude: lat,
+                longitude: lon,
+                savedAt: Date.now(),
+              })
+            }
+          }}
+          className={`ml-2 px-2 py-1 text-xs rounded-md border ${
+            isFavorite(weatherData.location.latitude, weatherData.location.longitude)
+              ? 'bg-yellow-400 text-blue-900 border-yellow-300'
+              : 'bg-white/10 text-white border-white/20 hover:bg-white/20'
+          }`}
+          aria-label="Toggle favorite"
+          title={isFavorite(weatherData.location.latitude, weatherData.location.longitude) ? 'Unsave' : 'Save'}
+        >
+          ★
+        </button>
       </div>
 
       {/* Main Weather Display */}

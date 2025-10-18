@@ -17,6 +17,8 @@ export interface WeatherData {
     city: string
     country: string
     admin1?: string
+    latitude: number
+    longitude: number
   }
 }
 
