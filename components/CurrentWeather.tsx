@@ -19,11 +19,11 @@ export default function CurrentWeather({ weatherData, unit, onToggleUnit, windSp
   const { lang } = useLanguage()
   const { isFavorite, addFavorite, removeFavorite } = useFavorites()
   return (
-    <div className="bg-blue-500/20 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-blue-300/30">
+    <div className="bg-blue-50 rounded-2xl p-8 shadow-2xl border border-blue-200">
       {/* Location */}
       <div className="flex items-center gap-2 mb-6">
         <MapPin className="w-5 h-5 text-slate-300" />
-        <h2 className="text-2xl font-semibold text-white">
+        <h2 className="text-2xl font-semibold text-slate-900">
           {weatherData.location.city}, {weatherData.location.admin1 || weatherData.location.country}
         </h2>
         <button
@@ -46,7 +46,7 @@ export default function CurrentWeather({ weatherData, unit, onToggleUnit, windSp
           className={`ml-2 px-2 py-1 text-xs rounded-md border ${
             isFavorite(weatherData.location.latitude, weatherData.location.longitude)
               ? 'bg-yellow-400 text-blue-900 border-yellow-300'
-              : 'bg-white/10 text-white border-white/20 hover:bg-white/20'
+              : 'bg-blue-50 text-slate-700 border-blue-200 hover:bg-blue-100'
           }`}
           aria-label="Toggle favorite"
           title={isFavorite(weatherData.location.latitude, weatherData.location.longitude) ? 'Unsave' : 'Save'}
@@ -63,16 +63,16 @@ export default function CurrentWeather({ weatherData, unit, onToggleUnit, windSp
             {getWeatherIcon(weatherData.current.weatherCode)}
           </div>
           <div>
-            <div className="text-7xl font-bold text-white">
+            <div className="text-7xl font-bold text-slate-900">
               {convertTemperature(weatherData.current.temperature, unit)}°{unit}
             </div>
-            <div className="text-xl text-blue-100 mt-2">
+            <div className="text-xl text-slate-600 mt-2">
               {getWeatherDescription(weatherData.current.weatherCode, lang)}
             </div>
             {/* Temperature Unit Toggle Button */}
             <button
               onClick={onToggleUnit}
-              className="mt-3 bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 rounded-lg px-3 py-1.5 text-white font-medium transition-all duration-200 hover:scale-105 shadow-lg text-xs flex items-center gap-1.5"
+              className="mt-3 bg-blue-600 hover:bg-blue-700 border border-blue-700 rounded-lg px-3 py-1.5 text-white font-medium transition-all duration-200 hover:scale-105 shadow-lg text-xs flex items-center gap-1.5"
               aria-label="Toggle temperature unit"
               title={`Switch to °${unit === 'C' ? 'F' : 'C'}`}
             >
@@ -84,18 +84,18 @@ export default function CurrentWeather({ weatherData, unit, onToggleUnit, windSp
 
         {/* Weather Details */}
         <div className="grid grid-cols-2 gap-6 md:gap-8">
-          <div className="bg-blue-500/15 rounded-xl p-4 backdrop-blur-sm border border-blue-300/20">
+          <div className="bg-blue-100 rounded-xl p-4 border border-blue-200">
             <div className="flex items-center gap-2 mb-2">
-              <Wind className="w-5 h-5 text-blue-200" />
-              <span className="text-slate-300 text-sm">{t(lang, 'wind_speed')}</span>
+              <Wind className="w-5 h-5 text-blue-600" />
+              <span className="text-slate-600 text-sm">{t(lang, 'wind_speed')}</span>
             </div>
-            <div className="text-2xl font-bold text-white mb-2">
+            <div className="text-2xl font-bold text-slate-900 mb-2">
               {convertWindSpeed(weatherData.current.windSpeed, windSpeedUnit)} <span className="text-lg">{getWindSpeedUnit(windSpeedUnit)}</span>
             </div>
             {/* Wind Speed Unit Toggle Button */}
             <button
               onClick={onToggleWindSpeedUnit}
-              className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded px-2 py-1 text-white font-medium transition-all duration-200 hover:scale-105 text-xs"
+              className="bg-blue-600 hover:bg-blue-700 border border-blue-700 rounded px-2 py-1 text-white font-medium transition-all duration-200 hover:scale-105 text-xs"
               aria-label="Toggle wind speed unit"
               title={`Switch to ${windSpeedUnit === 'kmh' ? 'mph' : 'km/h'}`}
             >
@@ -103,12 +103,12 @@ export default function CurrentWeather({ weatherData, unit, onToggleUnit, windSp
             </button>
           </div>
 
-          <div className="bg-blue-500/15 rounded-xl p-4 backdrop-blur-sm border border-blue-300/20">
+          <div className="bg-blue-100 rounded-xl p-4 border border-blue-200">
             <div className="flex items-center gap-2 mb-2">
-              <Droplets className="w-5 h-5 text-slate-300" />
-              <span className="text-slate-300 text-sm">{t(lang, 'humidity')}</span>
+              <Droplets className="w-5 h-5 text-blue-600" />
+              <span className="text-slate-600 text-sm">{t(lang, 'humidity')}</span>
             </div>
-            <div className="text-2xl font-bold text-white">
+            <div className="text-2xl font-bold text-slate-900">
               {weatherData.current.humidity}<span className="text-lg">%</span>
             </div>
           </div>
@@ -116,7 +116,7 @@ export default function CurrentWeather({ weatherData, unit, onToggleUnit, windSp
       </div>
 
       {/* Last Updated */}
-      <div className="mt-6 text-blue-200 text-sm">
+      <div className="mt-6 text-slate-500 text-sm">
         Last updated: {new Date(weatherData.current.time).toLocaleString()}
       </div>
     </div>

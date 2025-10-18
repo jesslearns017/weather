@@ -23,11 +23,11 @@ export default function ForecastCard({
   unit,
 }: ForecastCardProps) {
   return (
-    <div className="bg-white/8 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:bg-white/15 transition-all duration-200 hover:scale-105">
+    <div className="bg-white rounded-xl p-4 border border-blue-200 shadow hover:shadow-md transition-all duration-200 hover:scale-105">
       {/* Day and Date */}
       <div className="text-center mb-3">
-        <div className="text-white font-semibold text-lg">{day}</div>
-        <div className="text-blue-200 text-sm">{date}</div>
+        <div className="text-slate-900 font-semibold text-lg">{day}</div>
+        <div className="text-slate-600 text-sm">{date}</div>
       </div>
 
       {/* Weather Icon */}
@@ -36,20 +36,20 @@ export default function ForecastCard({
       </div>
 
       {/* Description */}
-      <div className="text-slate-300 text-sm text-center mb-4 h-10 flex items-center justify-center">
+      <div className="text-slate-600 text-sm text-center mb-4 h-10 flex items-center justify-center">
         {description}
       </div>
 
       {/* Temperature Range */}
       <div className="flex justify-center items-center gap-2 mb-3">
-        <span className="text-white font-bold text-xl">{convertTemperature(tempMax, unit)}°{unit}</span>
-        <span className="text-blue-200">/</span>
-        <span className="text-blue-300 text-lg">{convertTemperature(tempMin, unit)}°{unit}</span>
+        <span className="text-slate-900 font-bold text-xl">{convertTemperature(tempMax, unit)}°{unit}</span>
+        <span className="text-slate-500">/</span>
+        <span className="text-slate-700 text-lg">{convertTemperature(tempMin, unit)}°{unit}</span>
       </div>
 
       {/* Precipitation */}
       {precipitation > 0 && (
-        <div className="flex items-center justify-center gap-1 text-blue-200 text-sm">
+        <div className="flex items-center justify-center gap-1 text-blue-700 text-sm">
           <Droplets className="w-4 h-4" />
           <span>{precipitation.toFixed(1)} mm</span>
         </div>

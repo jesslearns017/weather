@@ -31,12 +31,15 @@ export default function WeatherDashboard() {
   }, [])
 
   const loadWeather = async (lat: number, lon: number, city: string, country: string, admin1?: string) => {
+    console.log('Loading weather for:', { lat, lon, city, country, admin1 })
     setLoading(true)
     setError(null)
     try {
       const data = await getWeatherData(lat, lon, city, country, admin1)
+      console.log('Weather data received:', data)
       setWeatherData(data)
     } catch (err) {
+      console.error('Weather load error:', err)
       setError('Failed to load weather data. Please try again.')
     } finally {
       setLoading(false)
@@ -150,7 +153,7 @@ export default function WeatherDashboard() {
 
       {/* Error State */}
       {error && (
-        <div className="bg-red-500/20 border border-red-500 text-white px-6 py-4 rounded-lg mb-6">
+        <div className="bg-red-100 border border-red-400 text-red-800 px-6 py-4 rounded-lg mb-6">
           {error}
         </div>
       )}
@@ -168,8 +171,8 @@ export default function WeatherDashboard() {
           />
 
           {/* 5-Day Forecast */}
-          <div className="bg-blue-500/15 backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-blue-300/20" style={{ boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4)' }}>
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+          <div className="bg-blue-50 rounded-2xl p-6 shadow-lg border border-blue-200">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
               <span>📅</span> {t(lang, 'forecast')}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">

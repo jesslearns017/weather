@@ -10,8 +10,8 @@ export default function LanguageToggle() {
       onClick={() => setLang(code)}
       className={`px-3 py-1.5 text-xs font-medium rounded-md border transition-all duration-200 ${
         lang === code
-          ? 'bg-white text-blue-700 border-white shadow'
-          : 'bg-white/10 text-white border-white/30 hover:bg-white/20'
+          ? 'bg-blue-600 text-white border-blue-600 shadow'
+          : 'bg-slate-200 text-slate-700 border-slate-300 hover:bg-slate-300'
       }`}
       aria-pressed={lang === code}
     >
@@ -20,7 +20,7 @@ export default function LanguageToggle() {
   )
 
   return (
-    <div className="ml-auto inline-flex items-center gap-2 bg-white/10 rounded-lg p-1 border border-white/20">
+    <div className="ml-auto inline-flex items-center gap-2 bg-slate-100 rounded-lg p-1 border border-slate-300">
       {btn('en')}
       {btn('es')}
     </div>

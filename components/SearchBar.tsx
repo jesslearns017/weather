@@ -31,6 +31,11 @@ export default function SearchBar({
           placeholder={t(lang, 'search_placeholder')}
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && searchResults.length > 0) {
+              onLocationSelect(searchResults[0])
+            }
+          }}
           className="w-full pl-12 pr-12 py-4 rounded-xl bg-white/90 backdrop-blur-sm border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-300 text-gray-800 placeholder-gray-500 shadow-lg"
         />
         {searchQuery && (
