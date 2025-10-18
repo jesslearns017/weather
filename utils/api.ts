@@ -18,8 +18,15 @@ function dedupeGeocoding(results: GeocodingResult[]): GeocodingResult[] {
   return out
 }
 
+function stripDiacritics(s: string) {
+  // Remove common combining marks after NFD normalization (no Unicode property escapes needed)
+  return (s || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+}
+
 function prioritizeByQuery(results: GeocodingResult[], query: string): GeocodingResult[] {
-  const norm = (s: string) => (s || '').toLowerCase().trim()
+  const norm = (s: string) => stripDiacritics((s || '').toLowerCase().trim())
   const q = norm(query)
   // Try to infer a trailing region/country token from the query, e.g. "barranquitas puerto rico"
   const parts = q.split(/\s+/)
@@ -44,6 +51,7 @@ function prioritizeByQuery(results: GeocodingResult[], query: string): Geocoding
 
 export async function searchLocation(query: string): Promise<GeocodingResult[]> {
   try {
+    const qRaw = query
     const response = await fetch(
       `${GEOCODING_API}?name=${encodeURIComponent(query)}&count=10&language=en&format=json`
     )
@@ -53,8 +61,28 @@ export async function searchLocation(query: string): Promise<GeocodingResult[]> 
     }
     
     const data = await response.json()
-    const results: GeocodingResult[] = data.results || []
-    const unique = dedupeGeocoding(results)
+    let results: GeocodingResult[] = data.results || []
+    let unique = dedupeGeocoding(results)
+
+    // If Puerto Rico is missing from the first pass and the user didn't already specify a country,
+    // try a focused query with "puerto rico" appended and merge the results at the top.
+    const norm = (s: string) => stripDiacritics((s || '').toLowerCase().trim())
+    const hasCountryHint = /,|\b(usa|us|united states|puerto rico|guam|virgin islands|american samoa|northern mariana)\b/i.test(qRaw)
+    const hasPuertoRico = unique.some(r => norm(r.admin1 || '').includes('puerto rico') || norm(r.country || '').includes('puerto rico'))
+    if (!hasCountryHint && !hasPuertoRico) {
+      try {
+        const prRes = await fetch(
+          `${GEOCODING_API}?name=${encodeURIComponent(query + ' puerto rico')}&count=5&language=en&format=json`
+        )
+        if (prRes.ok) {
+          const prData = await prRes.json()
+          const prList: GeocodingResult[] = prData.results || []
+          const merged = dedupeGeocoding([...prList, ...unique])
+          unique = merged
+        }
+      } catch {}
+    }
+
     const prioritized = prioritizeByQuery(unique, query)
     return prioritized.slice(0, 5)
   } catch (error) {
