@@ -38,7 +38,7 @@ export default function CurrentWeather({ weatherData, unit, onToggleUnit, windSp
               {convertTemperature(weatherData.current.temperature, unit)}°{unit}
             </div>
             <div className="text-xl text-blue-100 mt-2">
-              {getWeatherDescription(weatherData.current.weatherCode)}
+              {getWeatherDescription(weatherData.current.weatherCode, lang)}
             </div>
             {/* Temperature Unit Toggle Button */}
             <button

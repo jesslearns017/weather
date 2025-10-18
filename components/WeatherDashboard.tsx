@@ -171,7 +171,7 @@ export default function WeatherDashboard() {
                   day={getDayName(date, index + 1)}
                   date={new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                   icon={getWeatherIcon(weatherData.daily.weatherCode[index + 1])}
-                  description={getWeatherDescription(weatherData.daily.weatherCode[index + 1])}
+                  description={getWeatherDescription(weatherData.daily.weatherCode[index + 1], lang)}
                   tempMax={weatherData.daily.temperatureMax[index + 1]}
                   tempMin={weatherData.daily.temperatureMin[index + 1]}
                   precipitation={weatherData.daily.precipitation[index + 1]}
