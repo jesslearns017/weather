@@ -6,6 +6,7 @@ import { WeatherData, GeocodingResult } from '@/types/weather'
 import { getWeatherData, searchLocation } from '@/utils/api'
 import LanguageToggle from './LanguageToggle'
 import { useLanguage } from '@/context/LanguageContext'
+import { t } from '@/utils/strings'
 import { getWeatherDescription, getWeatherIcon } from '@/utils/weatherCodes'
 import CurrentWeather from './CurrentWeather'
 import ForecastCard from './ForecastCard'
@@ -72,10 +73,10 @@ export default function WeatherDashboard() {
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
-          Weather Dashboard
+          {t(lang, 'title')}
         </h1>
         <p className="text-blue-100 text-lg">
-          Current conditions and 5-day forecast
+          {t(lang, 'subtitle')}
         </p>
         <div className="mt-4 flex justify-end">
           <LanguageToggle />
@@ -160,7 +161,7 @@ export default function WeatherDashboard() {
           {/* 5-Day Forecast */}
           <div className="bg-blue-800/40 backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-blue-300/10" style={{ boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4)' }}>
             <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-              <span>📅</span> 5-Day Forecast
+              <span>📅</span> {t(lang, 'forecast')}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
               {weatherData.daily.time.slice(1, 6).map((date, index) => (

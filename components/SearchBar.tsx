@@ -1,5 +1,7 @@
 import { Search, MapPin, X } from 'lucide-react'
 import { GeocodingResult } from '@/types/weather'
+import { useLanguage } from '@/context/LanguageContext'
+import { t } from '@/utils/strings'
 
 interface SearchBarProps {
   searchQuery: string
@@ -18,6 +20,7 @@ export default function SearchBar({
   onLocationSelect,
   onClose,
 }: SearchBarProps) {
+  const { lang } = useLanguage()
   return (
     <div className="relative mb-8 max-w-2xl mx-auto">
       {/* Search Input */}
@@ -25,7 +28,7 @@ export default function SearchBar({
         <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
         <input
           type="text"
-          placeholder="Search for a city..."
+          placeholder={t(lang, 'search_placeholder')}
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           className="w-full pl-12 pr-12 py-4 rounded-xl bg-white/90 backdrop-blur-sm border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-300 text-gray-800 placeholder-gray-500 shadow-lg"
@@ -91,7 +94,7 @@ export default function SearchBar({
       {/* No Results Message */}
       {showResults && searchQuery.length >= 2 && searchResults.length === 0 && (
         <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 p-4 text-center text-gray-500">
-          No locations found. Try a different search term.
+          {t(lang, 'no_results')}
         </div>
       )}
     </div>

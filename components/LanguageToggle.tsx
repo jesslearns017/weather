@@ -4,15 +4,25 @@ import { useLanguage } from '@/context/LanguageContext'
 
 export default function LanguageToggle() {
   const { lang, setLang } = useLanguage()
-  const next = lang === 'en' ? 'es' : 'en'
-  return (
+  const btn = (code: 'en' | 'es') => (
     <button
-      onClick={() => setLang(next)}
-      className="ml-auto bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 rounded-lg px-3 py-1.5 text-white font-medium transition-all duration-200 hover:scale-105 shadow-lg text-xs"
-      aria-label="Toggle language"
-      title={`Switch to ${next.toUpperCase()}`}
+      key={code}
+      onClick={() => setLang(code)}
+      className={`px-3 py-1.5 text-xs font-medium rounded-md border transition-all duration-200 ${
+        lang === code
+          ? 'bg-white text-blue-700 border-white shadow'
+          : 'bg-white/10 text-white border-white/30 hover:bg-white/20'
+      }`}
+      aria-pressed={lang === code}
     >
-      {lang.toUpperCase()}
+      {code.toUpperCase()}
     </button>
+  )
+
+  return (
+    <div className="ml-auto inline-flex items-center gap-2 bg-white/10 rounded-lg p-1 border border-white/20">
+      {btn('en')}
+      {btn('es')}
+    </div>
   )
 }

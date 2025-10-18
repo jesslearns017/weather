@@ -115,7 +115,7 @@ function weatherCodeDescription(code: number): string {
 
 export async function POST(req: NextRequest) {
   try {
-    const { message, weatherData, selected, prefs } = await req.json()
+    const { message, weatherData, selected, prefs, lang } = await req.json()
 
     if (!message) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 })
@@ -328,13 +328,16 @@ ${forecastLines}`
     }
 
     const systemContext = serverCityContext || fallbackContext
+    const languageDirective = lang && (lang === 'es' || lang === 'en')
+      ? `Respond in ${lang === 'es' ? 'Spanish' : 'English'}.`
+      : ''
 
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [
         {
           role: 'system',
-          content: `You are a friendly, concise weather assistant.
+          content: `You are a friendly, concise weather assistant. ${languageDirective}
 Tone & style:
 - Be warm and collaborative; avoid sounding corrective.
 - Respond in ONE short paragraph (2–3 sentences). Do NOT enumerate days, and do NOT use bullet points or tables.

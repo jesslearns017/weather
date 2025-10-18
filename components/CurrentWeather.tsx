@@ -3,6 +3,8 @@ import { WeatherData } from '@/types/weather'
 import { getWeatherDescription, getWeatherIcon } from '@/utils/weatherCodes'
 import { convertTemperature } from '@/utils/temperature'
 import { convertWindSpeed, getWindSpeedUnit } from '@/utils/windSpeed'
+import { useLanguage } from '@/context/LanguageContext'
+import { t } from '@/utils/strings'
 
 interface CurrentWeatherProps {
   weatherData: WeatherData
@@ -13,6 +15,7 @@ interface CurrentWeatherProps {
 }
 
 export default function CurrentWeather({ weatherData, unit, onToggleUnit, windSpeedUnit, onToggleWindSpeedUnit }: CurrentWeatherProps) {
+  const { lang } = useLanguage()
   return (
     <div className="bg-blue-800/40 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-blue-300/10">
       {/* Location */}
@@ -44,7 +47,7 @@ export default function CurrentWeather({ weatherData, unit, onToggleUnit, windSp
               aria-label="Toggle temperature unit"
               title={`Switch to °${unit === 'C' ? 'F' : 'C'}`}
             >
-              <span>Change degrees</span>
+              <span>{t(lang, 'change_degrees_btn')}</span>
               <span className="text-sm">°{unit === 'C' ? 'F' : 'C'}</span>
             </button>
           </div>
@@ -55,7 +58,7 @@ export default function CurrentWeather({ weatherData, unit, onToggleUnit, windSp
           <div className="bg-white/5 rounded-xl p-4 backdrop-blur-sm border border-white/10">
             <div className="flex items-center gap-2 mb-2">
               <Wind className="w-5 h-5 text-blue-200" />
-              <span className="text-blue-200 text-sm">Wind Speed</span>
+              <span className="text-blue-200 text-sm">{t(lang, 'wind_speed')}</span>
             </div>
             <div className="text-2xl font-bold text-white mb-2">
               {convertWindSpeed(weatherData.current.windSpeed, windSpeedUnit)} <span className="text-lg">{getWindSpeedUnit(windSpeedUnit)}</span>
@@ -67,14 +70,14 @@ export default function CurrentWeather({ weatherData, unit, onToggleUnit, windSp
               aria-label="Toggle wind speed unit"
               title={`Switch to ${windSpeedUnit === 'kmh' ? 'mph' : 'km/h'}`}
             >
-              Change to {windSpeedUnit === 'kmh' ? 'mph' : 'km/h'}
+              {windSpeedUnit === 'kmh' ? t(lang, 'change_to_mph') : t(lang, 'change_to_kmh')}
             </button>
           </div>
 
           <div className="bg-white/5 rounded-xl p-4 backdrop-blur-sm border border-white/10">
             <div className="flex items-center gap-2 mb-2">
               <Droplets className="w-5 h-5 text-blue-200" />
-              <span className="text-blue-200 text-sm">Humidity</span>
+              <span className="text-blue-200 text-sm">{t(lang, 'humidity')}</span>
             </div>
             <div className="text-2xl font-bold text-white">
               {weatherData.current.humidity}<span className="text-lg">%</span>

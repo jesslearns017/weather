@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { Send, MessageCircle, X, Loader2 } from 'lucide-react'
 import { WeatherData } from '@/types/weather'
+import { useLanguage } from '@/context/LanguageContext'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -16,6 +17,7 @@ interface WeatherChatbotProps {
 }
 
 export default function WeatherChatbot({ weatherData, unit, windSpeedUnit }: WeatherChatbotProps) {
+  const { lang } = useLanguage()
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -75,6 +77,7 @@ export default function WeatherChatbot({ weatherData, unit, windSpeedUnit }: Wea
               message: `Selected ${selected.name}`,
               selected,
               prefs: { unit, windSpeedUnit },
+              lang,
             }),
           })
           const dataSel = await resp.json()
@@ -96,6 +99,7 @@ export default function WeatherChatbot({ weatherData, unit, windSpeedUnit }: Wea
           message: userMessage,
           weatherData: enrichedWeatherData,
           prefs: { unit, windSpeedUnit },
+          lang,
         }),
       })
 
@@ -238,6 +242,7 @@ export default function WeatherChatbot({ weatherData, unit, windSpeedUnit }: Wea
                             message: `Selected ${c.name}`,
                             selected: c,
                             prefs: { unit, windSpeedUnit },
+                            lang,
                           }),
                         })
                         const dataSel = await resp.json()
