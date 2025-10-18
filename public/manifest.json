@@ -1,0 +1,17 @@
+{
+  "name": "Weather Dashboard",
+  "short_name": "Weather",
+  "description": "Current conditions and 5-day forecast with AI assistant",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0a1e3a",
+  "theme_color": "#0a2a6b",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}
