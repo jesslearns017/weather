@@ -63,9 +63,10 @@ export default function WeatherDashboard() {
   }
 
   const getDayName = (dateString: string, index: number): string => {
-    if (index === 0) return 'Today'
+    const locale = lang === 'es' ? 'es-ES' : 'en-US'
+    if (index === 0) return lang === 'es' ? 'Hoy' : 'Today'
     const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', { weekday: 'short' })
+    return date.toLocaleDateString(locale, { weekday: 'short' })
   }
 
   return (
