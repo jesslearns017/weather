@@ -59,8 +59,8 @@ export default function SearchBar({
                 </div>
                 <div className="text-sm text-gray-500 truncate">
                   {(() => {
-                    const admin1 = result.admin1 || ''
-                    const country = result.country || ''
+                    const admin1 = (result.admin1 || '').trim()
+                    const country = (result.country || '').trim()
                     const usTerritories = [
                       'puerto rico',
                       'guam',
@@ -71,10 +71,15 @@ export default function SearchBar({
                       'commonwealth of the northern mariana islands',
                     ]
                     const isTerritory = country === 'United States' && usTerritories.includes(admin1.toLowerCase())
+                    // Build parts and join to avoid dangling commas
+                    const parts: string[] = []
                     if (admin1) {
-                      return isTerritory ? admin1 : `${admin1}, ${country}`
+                      parts.push(isTerritory ? admin1 : admin1)
                     }
-                    return country
+                    if (country && !isTerritory) {
+                      parts.push(country)
+                    }
+                    return parts.join(', ') || country || admin1
                   })()}
                 </div>
               </div>
