@@ -65,9 +65,9 @@ function extractLocationFromMessage(message: string): { city: string; country?: 
   return null
 }
 
-async function geocodeCity(query: string) {
+async function geocodeCity(query: string, lang?: 'en' | 'es') {
   const res = await fetch(
-    `${GEOCODING_API}?name=${encodeURIComponent(query)}&count=1&language=en&format=json`
+    `${GEOCODING_API}?name=${encodeURIComponent(query)}&count=1&language=${encodeURIComponent((lang||'en'))}&format=json`
   )
   if (!res.ok) throw new Error('Failed to geocode location')
   const data = await res.json()
@@ -155,8 +155,9 @@ export async function POST(req: NextRequest) {
         }
 
         const place = `${selected.name}${selected.admin1 ? `, ${selected.admin1}` : ''}${selected.country ? `, ${selected.country}` : ''}`
-        const reply = `Right now in ${place}, it's ${currentDesc.toLowerCase()} around ${tempStr} with winds near ${windStr}. Looking ahead, the next few days look mostly ${top}.`
-        return NextResponse.json({ reply })
+        const replyEn = `Right now in ${place}, it's ${currentDesc.toLowerCase()} around ${tempStr} with winds near ${windStr}. Looking ahead, the next few days look mostly ${top}.`
+        const replyEs = `Ahora mismo en ${place}, ${currentDesc.toLowerCase()} alrededor de ${tempStr} con vientos cercanos a ${windStr}. En los próximos días, predominará ${top}.`
+        return NextResponse.json({ reply: lang === 'es' ? replyEs : replyEn })
       } catch (e: any) {
         return NextResponse.json({ error: 'Failed to fetch selected location weather' }, { status: 500 })
       }
@@ -168,7 +169,7 @@ export async function POST(req: NextRequest) {
     if (detected) {
       try {
         // Get up to 5 results
-        const res = await fetch(`${GEOCODING_API}?name=${encodeURIComponent(detected.city)}&count=5&language=en&format=json`)
+        const res = await fetch(`${GEOCODING_API}?name=${encodeURIComponent(detected.city)}&count=5&language=${encodeURIComponent((lang||'en'))}&format=json`)
         if (!res.ok) throw new Error('Failed to geocode location')
         const dataGeo = await res.json()
         let results: GeoResult[] = (dataGeo?.results || [])
@@ -194,7 +195,9 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({
               prompt: 'choose_city',
               choices: results.slice(0, 5),
-              message: `I couldn't find matches in "${detected.country}" for "${detected.city}". Here are the closest matches I found. Please pick 1-${Math.min(results.length,5)} or tap a button:`,
+              message: lang === 'es'
+                ? `No encontré coincidencias en "${detected.country}" para "${detected.city}". Aquí están las opciones más cercanas. Por favor, elige 1-${Math.min(results.length,5)} o toca un botón:`
+                : `I couldn't find matches in "${detected.country}" for "${detected.city}". Here are the closest matches I found. Please pick 1-${Math.min(results.length,5)} or tap a button:`,
             })
           }
         } else {
@@ -220,7 +223,9 @@ export async function POST(req: NextRequest) {
           return NextResponse.json({
             prompt: 'choose_city',
             choices: results.slice(0, 5),
-            message: `I found a few places that match "${detected.city}${detected.country ? ', ' + detected.country : ''}" 😊\nPlease pick one by replying with 1-${Math.min(results.length,5)}, or tap a button below:`,
+            message: lang === 'es'
+              ? `Encontré algunos lugares que coinciden con "${detected.city}${detected.country ? ', ' + detected.country : ''}" 😊\nElige uno respondiendo con 1-${Math.min(results.length,5)}, o toca un botón:`
+              : `I found a few places that match "${detected.city}${detected.country ? ', ' + detected.country : ''}" 😊\nPlease pick one by replying with 1-${Math.min(results.length,5)}, or tap a button below:`,
           })
         }
         const geo = results[0]
@@ -231,7 +236,9 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({
               prompt: 'choose_city',
               choices: [geo],
-              message: `I couldn't find an exact match in "${detected.country}". Would you like the weather for ${geo.name}${geo.admin1 ? `, ${geo.admin1}` : ''}, ${geo.country}? Reply 1 to confirm or refine the city/country.`,
+              message: lang === 'es'
+                ? `No encontré una coincidencia exacta en "${detected.country}". ¿Quieres el clima de ${geo.name}${geo.admin1 ? `, ${geo.admin1}` : ''}, ${geo.country}? Responde 1 para confirmar o ajusta ciudad/país.`
+                : `I couldn't find an exact match in "${detected.country}". Would you like the weather for ${geo.name}${geo.admin1 ? `, ${geo.admin1}` : ''}, ${geo.country}? Reply 1 to confirm or refine the city/country.`,
             })
           }
           const data = await fetchWeather(geo.latitude, geo.longitude)
@@ -259,7 +266,7 @@ ${forecastLines}`
       } catch (e) {
         // Try a softer fallback: attempt geocoding the full message
         try {
-          const res2 = await fetch(`${GEOCODING_API}?name=${encodeURIComponent(message)}&count=5&language=en&format=json`)
+          const res2 = await fetch(`${GEOCODING_API}?name=${encodeURIComponent(message)}&count=5&language=${encodeURIComponent((lang||'en'))}&format=json`)
           if (res2.ok) {
             const dataGeo2 = await res2.json()
             let results2 = (dataGeo2?.results || []).map((r: any) => ({
@@ -274,7 +281,9 @@ ${forecastLines}`
               return NextResponse.json({
                 prompt: 'choose_city',
                 choices: results2.slice(0, 5),
-                message: `I found a few places related to your message 😊\nPlease choose 1-${Math.min(results2.length,5)}:`,
+                message: lang === 'es'
+                  ? `Encontré algunos lugares relacionados con tu mensaje 😊\nElige 1-${Math.min(results2.length,5)}:`
+                  : `I found a few places related to your message 😊\nPlease choose 1-${Math.min(results2.length,5)}:`,
               })
             } else if (results2[0]) {
               // Single match; fetch and reply
@@ -291,8 +300,9 @@ ${forecastLines}`
                   return `- ${date}: High ${tmax}°C, Low ${tmin}°C, ${desc}`
                 })
                 .join('\n')
-              const reply = `Here’s the latest for ${g.name}${g.admin1 ? `, ${g.admin1}` : ''}, ${g.country} ☀️\n\n- Temp: ${Math.round(data.current.temperature_2m)}°C · ${currentDesc}\n- Wind: ${Math.round(data.current.wind_speed_10m)} km/h · Humidity: ${data.current.relative_humidity_2m}%\n\n5-day outlook:\n${forecastLines}`
-              return NextResponse.json({ reply })
+              const replyEn = `Here’s the latest for ${g.name}${g.admin1 ? `, ${g.admin1}` : ''}, ${g.country} ☀️\n\n- Temp: ${Math.round(data.current.temperature_2m)}°C · ${currentDesc}\n- Wind: ${Math.round(data.current.wind_speed_10m)} km/h · Humidity: ${data.current.relative_humidity_2m}%\n\n5-day outlook:\n${forecastLines}`
+              const replyEs = `Este es el resumen para ${g.name}${g.admin1 ? `, ${g.admin1}` : ''}, ${g.country} ☀️\n\n- Temp: ${Math.round(data.current.temperature_2m)}°C · ${currentDesc}\n- Viento: ${Math.round(data.current.wind_speed_10m)} km/h · Humedad: ${data.current.relative_humidity_2m}%\n\nPronóstico de 5 días:\n${forecastLines}`
+              return NextResponse.json({ reply: lang === 'es' ? replyEs : replyEn })
             }
           }
         } catch {
